@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed YouTube Video</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 flex justify-center items-center h-screen">
+
+    <div class="bg-gray-900 p-6 rounded-lg shadow-lg max-w-lg w-full">
+        <div class="text-center text-white mb-4">
+            <h1 class="text-2xl font-semibold">Embed YouTube Video</h1>
+            <p class="text-gray-400">Masukkan link YouTube dan klik Enter!</p>
+        </div>
+
+        <!-- Input URL dan Button -->
+        <div class="mb-4">
+            <input id="youtubeLink" type="text" placeholder="Masukkan link YouTube..." class="w-full p-2 rounded-md text-black" />
+            <button id="embedButton" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md">
+                Embed Video
+            </button>
+        </div>
+
+        <!-- Iframe YouTube (Video Player) -->
+        <div id="videoContainer" class="mt-6 hidden">
+            <iframe id="videoPlayer" class="w-full h-80" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const youtubeLinkInput = document.getElementById('youtubeLink');
+        const embedButton = document.getElementById('embedButton');
+        const videoContainer = document.getElementById('videoContainer');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        // Function untuk extract Video ID dari URL YouTube
+        function extractVideoId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        // Event listener untuk klik tombol Embed Video
+        embedButton.addEventListener('click', () => {
+            const videoUrl = youtubeLinkInput.value.trim();
+            const videoId = extractVideoId(videoUrl);
+
+            if (videoId) {
+                // Update iframe src dan tampilkan iframe
+                videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                videoContainer.classList.remove('hidden');
+            } else {
+                alert('Tolong masukkan URL YouTube yang valid.');
+            }
+        });
+
+        // Optional: Menambahkan event untuk tekan Enter pada input
+        youtubeLinkInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                embedButton.click();
+            }
+        });
+    </script>
+
+</body>
+</html>
